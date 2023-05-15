@@ -1,5 +1,6 @@
 import { useState,useEffect } from 'react'
 import React from 'react';
+import { useLazyGetSummaryQuery } from '../services/article';
 
 import {copy,linkIcon,loader,tick} from "../assets";
 
@@ -9,6 +10,8 @@ const Demo = () => {
     url:'',
     summary:"",
   });
+
+  const [getSummary,{error,isFetching}] = useLazyGetSummaryQuery();
 
   const handleSubmit = async(e) =>{
     alert('Submitted');
@@ -35,7 +38,6 @@ const Demo = () => {
               onChange={(e) =>{setArticle({
                 ...article,url:e.target.value
               })}}
-              
               required
               className='url_input peer'
             />
