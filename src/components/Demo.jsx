@@ -7,20 +7,37 @@ import {copy,linkIcon,loader,tick} from "../assets";
 const Demo = () => {
 
   const [article,setArticle] = useState({
-    url:'',
+    url:"",
     summary:"",
   });
 
+  const [allArticles,setAllArticles] = useState([]);
+
   const [getSummary,{error,isFetching}] = useLazyGetSummaryQuery();
+
+
+  useEffect(()=>{
+    const articlesFromLocalStorage = JSON.parse(localStorage.getItem("articles")
+    );
+
+    if(articlesFromLocalStorage){
+      setAllArticles(articlesFromLocalStorage);
+    }
+
+  },[])
 
   const handleSubmit = async(e) =>{
     e.preventDefault();
 
-    const {data} = await getSummary({articleUrl: article.url});
+  const {data} = await getSummary({articleUrl: article.url});
     if(data?.summary){
       const newArticle ={...article,summary : data.summary};
+
+      const updatedArticles = [newArticle,...allArticles];
+      setAllArticles(updatedArticles);
       setArticle(newArticle);
-      console.log(newArticle);
+
+      localStorage.setItem("articles",JSON.stringify(updatedArticles));
     }
   }
 
@@ -56,11 +73,26 @@ const Demo = () => {
             >
               <p>↵</p>
             </button>
-          </form>
-
-          
+          </form>    
           {/* Browser URL History */}
-   
+          
+          <div className='flex flex-col gap-1 max-h-60 overflow--y-auto'>
+              {
+                allArticles.map((article,index)=>(
+                  <div 
+                    key={`link-${index}`}
+                    onClick={()=>setArticle(article)}
+                    className='link_card'
+                  >
+                  <div className='copy_btn' >
+                    <img src={copy} alt="copy_btn" />
+                  </div>
+                    <p className='truncate'>{article.url}</p>
+                  </div>
+                ))
+              }
+          </div>
+
         </div>
 
         {/* Display Results */}
