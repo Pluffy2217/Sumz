@@ -1,4 +1,4 @@
 # AI-sumz
 This is a free and opensource website which helps you to summarize lenghty articles into clear and concise summaries.
 
-Check it out :  https://ai-sumz.vercel.app/
+Check it out :  https://sumz-six.vercel.app/
